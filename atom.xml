@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-28T15:26:41.424Z</updated>
+  <updated>2022-03-28T15:29:29.155Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>newpapername</title>
+    <title>Ubuntu20.04安装部署Fabric v1.4.0 — 单机部署</title>
     <link href="http://example.com/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/"/>
     <id>http://example.com/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/</id>
     <published>2022-03-28T10:21:03.000Z</published>
-    <updated>2022-03-28T15:26:41.424Z</updated>
+    <updated>2022-03-28T15:29:29.155Z</updated>
     
     <content type="html"><![CDATA[<pre><code>总体来说还是得遇到点坑，自己装会熟练很多，很多问题在遇到解决完以后就更容易理解了</code></pre><ol><li><p>​    前面基本没有什么好说的，按照博主的步骤一步一步来会好很多，别自己跳步骤。</p></li><li><p>在用bootstrap.脚本安装脚本大多数情况会出错，就需要我们自己手动来完成bootstrap的几项工作，即bootstrap.sh帮我们干了什么事：</p><ol><li>如果在当前目录中没有 <code>hyperledger/fabric-samples</code>，则从 <code>github.com</code> 克隆 <code>hyperledger/fabric-samples</code> 存储库</li><li>使用 <code>checkout</code> 签出对应指定的版本标签</li><li>将指定版本的Hyperledger Fabric平台特定的二进制文件和配置文件安装到 <code>fabric-samples</code> 存储库的根目录中</li><li>下载指定版本的 <code>Hyperledger Fabric docker</code> 镜像文件</li><li>将下载的 docker 镜像文件标记为 “latest”</li></ol></li><li><p>首先将二进制文件和配置文件安装到fabric-samples的bin和config目录中，按照博主的给的链接下载，传到自己的运行主机当中，解压到$GOPATH&#x2F;src&#x2F;github.com&#x2F;hyperledger&#x2F;fabric-samples&#x2F;中即可。注意在下载相关Docker镜像的时候版本要与sample的所需的版本一致，版本不一致会导致链接不成功，拉取镜像后都要进行重命名：latest，如此操作。每次重新启动网络时，都要<code>./byfn.sh down</code>删除所有数据，然后再启动网络。</p></li><li><p>到最后可能有一个</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Error: error getting chaincode deployment spec for mycc: error getting chaincode package bytes: failed to calculate dependencies: incomplete package: github.com/hyperledger/fabric/core/chaincode/shim</span><br><span class="line">!!!!!!!!!!!!!!! Chaincode installation on peer0.org1 has failed !!!!!!!!!!!!!!!!</span><br><span class="line">========= ERROR !!! FAILED to execute End-2-End Scenario ===========</span><br></pre></td></tr></table></figure><p>跟脚本代码是从（<a href="https://github.com/hyperledger/fabric-samples/blob/1343ccb6282e4ecab23ccdba0d1b2158cf7dfd55/first-network/scripts/utils.sh#L126">github</a>）以下逻辑报出的，意思讲以下依赖未找到（<a href="https://github.com/hyperledger/fabric-samples/blob/1343ccb6282e4ecab23ccdba0d1b2158cf7dfd55/chaincode/chaincode_example02/go/chaincode_example02.go#L29">github</a>），或许是仓库分支代码，<code>release-1.4</code>是有的，最新的<code>master</code>分支已经删掉了，可以考虑更新下新版的依赖，但是后来感觉也不是这个问题。。。。,可以参考<a href="https://www.bcskill.com/index.php/archives/925.html%EF%BC%8C%E6%9C%80%E5%90%8E%E6%88%91%E6%B2%A1%E6%9C%89%E6%8D%A2%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%9C%A8%E5%8D%9A%E4%B8%BB%E5%B8%AE%E5%8A%A9%E4%B8%8B%EF%BC%8C%E5%8F%91%E7%8E%B0%E6%98%AFdocker">https://www.bcskill.com/index.php/archives/925.html，最后我没有换依赖，在博主帮助下，发现是docker</a> 镜像版本的问题，修改后配置成功了，遇到问题检查下前面的步骤有没有和文中一致，祝你好运！</p></li></ol>]]></content>
     
