@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>newpapername | JuMi'blog</title><meta name="keywords" content="Fabric"><meta name="author" content="SnoppDogg"><meta name="copyright" content="SnoppDogg"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="总体来说还是得遇到点坑，自己装会熟练很多，很多问题在遇到解决完以后就更容易理解了   ​    前面基本没有什么好说的，按照博主的步骤一步一步来会好很多，别自己跳步骤。  在用bootstrap.脚本安装脚本大多数情况会出错，就需要我们自己手动来完成bootstrap的几项工作，即bootstrap.sh帮我们干了什么事：  如果在当前目录中没有 hyperledger&#x2F;fabric-sample">
+<meta property="og:type" content="article">
+<meta property="og:title" content="newpapername">
+<meta property="og:url" content="http://example.com/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="JuMi&#39;blog">
+<meta property="og:description" content="总体来说还是得遇到点坑，自己装会熟练很多，很多问题在遇到解决完以后就更容易理解了   ​    前面基本没有什么好说的，按照博主的步骤一步一步来会好很多，别自己跳步骤。  在用bootstrap.脚本安装脚本大多数情况会出错，就需要我们自己手动来完成bootstrap的几项工作，即bootstrap.sh帮我们干了什么事：  如果在当前目录中没有 hyperledger&#x2F;fabric-sample">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+<meta property="article:published_time" content="2022-03-28T10:21:03.000Z">
+<meta property="article:modified_time" content="2022-03-28T10:45:21.257Z">
+<meta property="article:author" content="SnoppDogg">
+<meta property="article:tag" content="Fabric">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'newpapername',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-03-28 18:45:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="JuMi'blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s3.bmp.ovh/imgs/2022/03/9631762c2c399b0b.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s3.bmp.ovh/imgs/2022/03/47da4df119817604.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">JuMi'blog</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">newpapername</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-28T10:21:03.000Z" title="发表于 2022-03-28 18:21:03">2022-03-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-03-28T10:45:21.257Z" title="更新于 2022-03-28 18:45:21">2022-03-28</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="newpapername"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><pre><code>总体来说还是得遇到点坑，自己装会熟练很多，很多问题在遇到解决完以后就更容易理解了
+</code></pre>
+<ol>
+<li><p>​    前面基本没有什么好说的，按照博主的步骤一步一步来会好很多，别自己跳步骤。</p>
+</li>
+<li><p>在用bootstrap.脚本安装脚本大多数情况会出错，就需要我们自己手动来完成bootstrap的几项工作，即bootstrap.sh帮我们干了什么事：</p>
+<ol>
+<li>如果在当前目录中没有 <code>hyperledger/fabric-samples</code>，则从 <code>github.com</code> 克隆 <code>hyperledger/fabric-samples</code> 存储库</li>
+<li>使用 <code>checkout</code> 签出对应指定的版本标签</li>
+<li>将指定版本的Hyperledger Fabric平台特定的二进制文件和配置文件安装到 <code>fabric-samples</code> 存储库的根目录中</li>
+<li>下载指定版本的 <code>Hyperledger Fabric docker</code> 镜像文件</li>
+<li>将下载的 docker 镜像文件标记为 “latest”</li>
+</ol>
+</li>
+<li><p>首先将二进制文件和配置文件安装到fabric-samples的bin和config目录中，按照博主的给的链接下载，传到自己的运行主机当中，解压到$GOPATH&#x2F;src&#x2F;github.com&#x2F;hyperledger&#x2F;fabric-samples&#x2F;中即可。注意在下载相关Docker镜像的时候版本要与sample的所需的版本一致，版本不一致会导致链接不成功，拉取镜像后都要进行重命名：latest，如此操作。每次重新启动网络时，都要<code>./byfn.sh down</code>删除所有数据，然后再启动网络。</p>
+</li>
+<li><p>到最后可能有一个</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Error: error getting chaincode deployment spec for mycc: error getting chaincode package bytes: failed to calculate dependencies: incomplete package: github.com/hyperledger/fabric/core/chaincode/shim</span><br><span class="line">!!!!!!!!!!!!!!! Chaincode installation on peer0.org1 has failed !!!!!!!!!!!!!!!!</span><br><span class="line">========= ERROR !!! FAILED to execute End-2-End Scenario ===========</span><br></pre></td></tr></table></figure>
+
+<p>跟脚本代码是从（<a target="_blank" rel="noopener" href="https://github.com/hyperledger/fabric-samples/blob/1343ccb6282e4ecab23ccdba0d1b2158cf7dfd55/first-network/scripts/utils.sh#L126">github</a>）以下逻辑报出的，意思讲以下依赖未找到（<a target="_blank" rel="noopener" href="https://github.com/hyperledger/fabric-samples/blob/1343ccb6282e4ecab23ccdba0d1b2158cf7dfd55/chaincode/chaincode_example02/go/chaincode_example02.go#L29">github</a>），或许是仓库分支代码，<code>release-1.4</code>是有的，最新的<code>master</code>分支已经删掉了，可以考虑更新下新版的依赖，但是后来感觉也不是这个问题。。。。,可以参考<a target="_blank" rel="noopener" href="https://www.bcskill.com/index.php/archives/925.html%EF%BC%8C%E6%9C%80%E5%90%8E%E6%88%91%E6%B2%A1%E6%9C%89%E6%8D%A2%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%9C%A8%E5%8D%9A%E4%B8%BB%E5%B8%AE%E5%8A%A9%E4%B8%8B%EF%BC%8C%E5%8F%91%E7%8E%B0%E6%98%AFdocker">https://www.bcskill.com/index.php/archives/925.html，最后我没有换依赖，在博主帮助下，发现是docker</a> 镜像版本的问题，修改后配置成功了，遇到问题检查下前面的步骤有没有和文中一致，祝你好运！</p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">SnoppDogg</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/">http://example.com/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">JuMi'blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Fabric/">Fabric</a></div><div class="post_share"><div class="social-share" data-image="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/03/28/hello-world/"><img class="next-cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hello World</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s3.bmp.ovh/imgs/2022/03/9631762c2c399b0b.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">SnoppDogg</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/" title="newpapername"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="newpapername"/></a><div class="content"><a class="title" href="/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/" title="newpapername">newpapername</a><time datetime="2022-03-28T10:21:03.000Z" title="发表于 2022-03-28 18:21:03">2022-03-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/28/hello-world/" title="Hello World"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/2022/03/28/hello-world/" title="Hello World">Hello World</a><time datetime="2022-03-28T07:40:00.828Z" title="发表于 2022-03-28 15:40:00">2022-03-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By SnoppDogg</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
