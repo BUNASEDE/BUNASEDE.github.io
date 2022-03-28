@@ -1,2 +1,4 @@
+http://example.com/2022/03/28/newpapername/
 http://example.com/2022/03/28/hello-world/
 http://example.com/
+http://example.com/tags/tag1/
