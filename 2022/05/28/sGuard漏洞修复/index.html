@@ -1,0 +1,297 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>sGuard漏洞修复 | JuMi'blog</title><meta name="keywords" content="智能合约,漏洞,Ethereum"><meta name="author" content="SnoppDogg"><meta name="copyright" content="SnoppDogg"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="GUARD：智能合约的漏洞检测及其修复Introduction 验证和测试是避免合约漏洞的现如今的两个主要方向，SGUARD受启发于程序修复技术（program fixing techniques）Github:https:&#x2F;&#x2F;github.com&#x2F;duytai&#x2F;sGuard  大体分为两步  收集一个有限的象征性执行集合（symbolic execution traces），对其进行静态分析，判">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sGuard漏洞修复">
+<meta property="og:url" content="http://example.com/2022/05/28/sGuard%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D/index.html">
+<meta property="og:site_name" content="JuMi&#39;blog">
+<meta property="og:description" content="GUARD：智能合约的漏洞检测及其修复Introduction 验证和测试是避免合约漏洞的现如今的两个主要方向，SGUARD受启发于程序修复技术（program fixing techniques）Github:https:&#x2F;&#x2F;github.com&#x2F;duytai&#x2F;sGuard  大体分为两步  收集一个有限的象征性执行集合（symbolic execution traces），对其进行静态分析，判">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.328888.xyz/2022/05/28/tIneJ.png">
+<meta property="article:published_time" content="2022-05-28T11:25:26.000Z">
+<meta property="article:modified_time" content="2022-05-28T11:30:13.283Z">
+<meta property="article:author" content="SnoppDogg">
+<meta property="article:tag" content="智能合约">
+<meta property="article:tag" content="漏洞">
+<meta property="article:tag" content="Ethereum">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.328888.xyz/2022/05/28/tIneJ.png"><link rel="shortcut icon" href="/img/bitbug_favicon.ico"><link rel="canonical" href="http://example.com/2022/05/28/sGuard%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'sGuard漏洞修复',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-28 19:30:13'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="JuMi'blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s3.bmp.ovh/imgs/2022/03/9631762c2c399b0b.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s3.bmp.ovh/imgs/2022/05/28/cbd1f316f9cf04cf.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">JuMi'blog</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">sGuard漏洞修复</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-28T11:25:26.000Z" title="发表于 2022-05-28 19:25:26">2022-05-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-05-28T11:30:13.283Z" title="更新于 2022-05-28 19:30:13">2022-05-28</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="sGuard漏洞修复"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="GUARD：智能合约的漏洞检测及其修复"><a href="#GUARD：智能合约的漏洞检测及其修复" class="headerlink" title="GUARD：智能合约的漏洞检测及其修复"></a>GUARD：智能合约的漏洞检测及其修复</h1><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ol>
+<li><p>验证和测试是避免合约漏洞的现如今的两个主要方向，SGUARD受启发于程序修复技术（program fixing techniques）Github:<a target="_blank" rel="noopener" href="https://github.com/duytai/sGuard">https://github.com/duytai/sGuard</a></p>
+</li>
+<li><p>大体分为两步</p>
+<ol>
+<li>收集一个有限的象征性执行集合（symbolic execution traces），对其进行静态分析，判断是否存在潜在漏洞，SGURAD现在能够支持检测修复四种常见漏洞。SGUARD的静态分析引擎是从零开始构建的，现存安全分析工具对于SGURAD来说是不可行的</li>
+<li>对每一种SGUARD支持的漏洞对其源代码都有特定的修复模式，在终止时也是完整健全的</li>
+</ol>
+</li>
+<li><p>contribution：</p>
+<ol>
+<li><p>提供了支持四种智能合约的漏洞，对其进行自我修复</p>
+</li>
+<li><p>证明了方法是完整健全的</p>
+</li>
+<li><p>对5000份进行评估修复，修复1605份，修复时间和gas花销都是较小的</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528191722271.png" alt="image-20220528191722271"></p>
+</li>
+</ol>
+</li>
+</ol>
+<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><ol>
+<li><p>根据字节码对漏洞进行检测，基于源代码对合约进行修复</p>
+</li>
+<li><p>修补过程对所有的算术操作都被能够安全执行相应操作的函数所调用或者取代，防止出现一些漏洞</p>
+</li>
+<li><p>SGUARD不要求修复的规格来自用户，将会限制在实践中的通用性，为此SGUARD总是保守的假设所有可能导致漏洞的算术溢出都是有问题的，虽然补丁代价不是最小的，但保证补丁传输代理没有算术漏洞，由此产生的智能合约没有算术漏洞和再现漏洞</p>
+<hr>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528191802592.png" alt="image-20220528191802592"></p>
+<h1 id="Problem-Definition"><a href="#Problem-Definition" class="headerlink" title="Problem Definition"></a>Problem Definition</h1><ol>
+<li><p>每个操作码都静态分配了唯一的一个程序计数器，保证了每个操作码都可以更具程序计数器进行唯一识别。</p>
+</li>
+<li><p>var包括堆栈变量、内存变量、存储变量，堆栈和内存变量都是易失性的，在每次交易前都会被清除，被视为局部变量，存储变量是非易失性的，在区块链上持久存在，一起在特定的值下确定智能合约的状态，为合同级变量</p>
+</li>
+<li><p>合约执行会生成只能合同的符号痕迹，在外部呼叫的情况下，不是将当前执行上下文切换到另外一个只能智能合同，简化利用符号值来表示外部呼叫的返回值</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528191839498.png" alt="image-20220528191839498"></p>
+</li>
+<li><p>Definitions</p>
+</li>
+<li><ol>
+<li><p>控制依赖性（Control dependency)：某一个操作要想执行，必须依赖于前面的某一个硬性操作哦，所有迹线都必须通过。</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528191931153.png" alt="image-20220528191931153"></p>
+</li>
+<li><p>数据依赖性（Data dependency）：堆栈变量、内存变量、存储变量</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528191937113.png" alt="image-20220528191937113"></p>
+</li>
+<li><p>可重入式漏洞</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528191945853.png" alt="image-20220528191945853"></p>
+</li>
+<li><p>跨函数可重入漏洞</p>
+</li>
+<li><p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528191952459.png" alt="image-20220528191952459"></p>
+</li>
+<li><p>tx.orgin漏洞：错误的以太传输不可逆转的</p>
+</li>
+<li><p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528191957600.png" alt="image-20220528191957600"></p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528192003594.png" alt="image-20220528192003594"></p>
+</li>
+</ol>
+</li>
+<li><p>construct一个智能合同满足条件是：（1和2是关于建设的正确性，3是关于计算gas开销的正确性）</p>
+<ol>
+<li><p>T无任何一个上述漏洞</p>
+</li>
+<li><p>每个符号跟踪，若不存在任何楼哦对那个损失，鉴于相同的输入，应该产生相同的输出和状态</p>
+</li>
+<li><p>T的执行速度和gas的消耗速度应该相差很小</p>
+<img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20211125204258935.png" alt="image-20211125204258935" style="zoom:80%;" />
+
+<hr>
+<h1 id="Detailed-Approach"><a href="#Detailed-Approach" class="headerlink" title="Detailed Approach"></a>Detailed Approach</h1><ol>
+<li><p>精确识别控制依赖和数据依赖是精确识别漏洞的先决条件</p>
+</li>
+<li><p>一种是识别漏洞方法是通过过度近似的静态分析，基于SGURAD的设置，一旦漏洞被识别，通过引入额外的运行时间来修复它，其次，现有方法也会不完整，不能够捕获所有依赖，第三，若重写系统在没有任何结果的情况下终止，分析结果可能没有什么作响，在该系统中始终以一种涵盖高精度的所有依赖以正确的结果终止</p>
+</li>
+<li><p>算法细节</p>
+<ol>
+<li><p>系统的枚举具有象征性的跟踪，最多可为每个循环迭代的某些阈值数量</p>
+</li>
+<li><p>每一条symbolic trace都被检查，来判断是否更具我们的定义隶属于确定的漏洞</p>
+</li>
+<li><p>相应的基于AST的源代码漏洞被识别和修复</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528192018651.png" alt="image-20220528192018651"></p>
+</li>
+</ol>
+</li>
+<li><p>概述：首先识别循环头，bound（n）代表我们收集的符号踪迹的被访问的次数，bound(n)是根据在该循坏体内的分支语句和赋值语句的数量，相当于就是说反向遍历循环体，从结束循环的节点到n，每单个执行路径维护一个bound（数值为在该条路径下赋值语句的数量），若该单个执行路径存在有分支语句（branch）则设置一个新bound，每个节点的bound是根据（fixed-point algorithm）<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42765703/article/details/101980875">不动点 </a>进行计算的，如果一旦计算出来bounds的值，我们便系统列举所有最大符号跟踪数量， 即循环头（n）最多也被访问n次，通过这个过程来看是否总是会终止并返回一组symbolic traces。SGURAD保证了使用bound不会错过4种漏洞的任何一种。</p>
+</li>
+<li><p>查看所有依赖关系显示在我们收集的symbolic traces中，我们区分了两种状况，所有的控制依赖在分支执行时都会被识别出来，这是基于上面提到的收集symbolic traces的方法，该方法同时也适用于不属于任何循环的数据依赖。</p>
+</li>
+<li><p>循环路径执行会遇到路径过多。SGUARD在探索符号路径是指数级的，工具会默认设置一个k值，当K大的时候会导致路径爆炸的问题，而K小的时候会导致错误的阴性结果，SGUARD自动为每个循环确定一个循环界限。</p>
+</li>
+<li><p>为了系统识别所有控制依赖关系，SGUARD构造了一个控制流图，利用WorkList algorithm建立了一个基于（CFG）control flow graph的<a target="_blank" rel="noopener" href="https://blog.csdn.net/dashuniuniu/article/details/52224882">后支配树</a>。</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528192052739.png" alt="image-20220528192052739"></p>
+</li>
+</ol>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20220528192059254.png" alt="image-20220528192059254"></p>
+<ol>
+<li><p>对数据的依赖更为复杂，跟踪数据源上的数据流，以获取数据依赖性，数据通过MSTORE从堆栈流到内存，通过MLOAD从内存流到堆栈，通过SSTORE从堆栈流到存储，通过SLOAD从存储流到堆栈。由于只有数据赋值操作会产生属于据依赖，级上述的三种过程，设计的一种基于symbolic traces的赋值操作码来识别数据依赖。</p>
+</li>
+<li><p>合约修复的一般步骤：</p>
+<ol>
+<li><p>给定一个symbolic traces，必须存在一些其他OPc的依赖的操作码操作，基本思想是在操作前引入运行时检查，以防止漏洞，根据漏洞的类型，运行时检查的注入有如下：</p>
+<ol>
+<li><p>在一个包含op操作的函数F中添加了一个修饰符，防止函数(intra-function)内部的可重入漏洞，组织攻击者重新进入F;为了防止（cross-function）的重入漏洞，同样也添加了修饰符，细节在Algorithm 4有所体现。 </p>
+<img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20211125192211628.png" alt="image-20211125192211628" style="zoom:80%;" />
+</li>
+<li><p>为了修复<a target="_blank" rel="noopener" href="https://ssr-zjm.github.io/2020/05/04/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%A1%E8%AE%A1-tx.origin%E6%BC%8F%E6%B4%9E.html">tx.origin</a>漏洞，将op（ORIGIN）替换为msg.sender为调用该函数的直接账户的地址</p>
+</li>
+<li><p>为了修复算数漏洞，将一些op操作替换为对安全函数的调用，在执行算数操作之前检查overflow&#x2F;underflow</p>
+</li>
+</ol>
+</li>
+<li><p>需要注意的，在有reentrancy vulnerability 和 arithmetic vulnerability的情况下，如果运行时检查失败，交易将立即回复执行前的状态，从而防止漏洞，即使已有gas被花费。</p>
+</li>
+</ol>
+</li>
+<li><p>Theorem（定理）</p>
+<ol>
+<li><p>Algorithm 1修复的智能合同没有<strong>intra-function reentrancy vulnerability, cross-function reentrancy vulnerability, dangerous tx.origin vulnerability, and arithmetic vulnerability</strong>漏洞，Proof:给定一个智能合约S，若有漏洞，SGUARD至少识别其中之一</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20211125193849038.png" alt="image-20211125193849038"></p>
+<hr>
+<h1 id="IMPLEMENTATION-AND-EVALUATION"><a href="#IMPLEMENTATION-AND-EVALUATION" class="headerlink" title="IMPLEMENTATION AND EVALUATION"></a>IMPLEMENTATION AND EVALUATION</h1><p>Emplement and Evaluation</p>
+</li>
+</ol>
+</li>
+<li><p>node.js实现，字节码用来检测 可重入性，而source-map和AST用来修复原代码级别的智能合约，source-map将OPcode映射到statement当中，再将statement连接到AST的节点中，以上来完全控制和修复智能合约。</p>
+</li>
+<li><p>SGUARD的实施还必须处理多种复杂问题</p>
+<ol>
+<li>Solidity允许开发人员利用EVM虚拟机的OPcode来交织代码，允许一些详细深入的控制，也为漏洞发掘打开了新的一扇门。决定将OPcode 引入内联汇编中。？？？</li>
+<li>用多种启发式的方式来避免无用的修复，例如：给定一个算术表法式，有具体值的操作数（比如用户输入等），SGUARD就不会用安全数学的表达式去替换，由于每个循坏要展开的迭代次数取决于赋值语句的数量，会忽略一些赋值语句<ol>
+<li>swap没有根据源映射映射在内</li>
+<li>赋值表达式右边是常数</li>
+<li>赋值表达式右边是存储变量，不会计算在内，因为无论顺序如何，都会分析存储变量导致的依赖性</li>
+</ol>
+</li>
+<li>引入估算内存指针值的策略，内存变量永远放置在自由内存中指针上，永远不会被释放，自由指针通常是一个符号值，为了简化问题而不丧失依赖性，SGUARD会估计自由指针ptr的值，</li>
+</ol>
+</li>
+<li><p>SGURAD允许用户提供额外的guide来生成特定于某些合同的修复程序，例如保护用户声明的某些关键变量</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">SnoppDogg</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2022/05/28/sGuard%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D/">http://example.com/2022/05/28/sGuard%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">JuMi'blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/">智能合约</a><a class="post-meta__tags" href="/tags/%E6%BC%8F%E6%B4%9E/">漏洞</a><a class="post-meta__tags" href="/tags/Ethereum/">Ethereum</a></div><div class="post_share"><div class="social-share" data-image="https://s1.328888.xyz/2022/05/28/tIneJ.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/05/28/fabric%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><img class="next-cover" src="https://s1.328888.xyz/2022/05/28/tzrZJ.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">fabric常用命令</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s3.bmp.ovh/imgs/2022/03/9631762c2c399b0b.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">SnoppDogg</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/BUNASEDE" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="/jasper0710wp@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is Snopp's Blog! Welcome to find problems and contact me.\n --jasper0710wp@gmail.com \n  wechart-Snopp_GodZilla_Ouuuu</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#GUARD%EF%BC%9A%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E7%9A%84%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B%E5%8F%8A%E5%85%B6%E4%BF%AE%E5%A4%8D"><span class="toc-number">1.</span> <span class="toc-text">GUARD：智能合约的漏洞检测及其修复</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">2.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Background"><span class="toc-number">3.</span> <span class="toc-text">Background</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Problem-Definition"><span class="toc-number">4.</span> <span class="toc-text">Problem Definition</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Detailed-Approach"><span class="toc-number">5.</span> <span class="toc-text">Detailed Approach</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IMPLEMENTATION-AND-EVALUATION"><span class="toc-number">6.</span> <span class="toc-text">IMPLEMENTATION AND EVALUATION</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/05/28/sGuard%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D/" title="sGuard漏洞修复"><img src="https://s1.328888.xyz/2022/05/28/tIneJ.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="sGuard漏洞修复"/></a><div class="content"><a class="title" href="/2022/05/28/sGuard%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D/" title="sGuard漏洞修复">sGuard漏洞修复</a><time datetime="2022-05-28T11:25:26.000Z" title="发表于 2022-05-28 19:25:26">2022-05-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/28/fabric%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="fabric常用命令"><img src="https://s1.328888.xyz/2022/05/28/tzrZJ.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="fabric常用命令"/></a><div class="content"><a class="title" href="/2022/05/28/fabric%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="fabric常用命令">fabric常用命令</a><time datetime="2022-05-28T08:22:15.000Z" title="发表于 2022-05-28 16:22:15">2022-05-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/28/%E6%97%A5%E7%94%A8%E5%91%BD%E4%BB%A4/" title="日用命令"><img src="https://s1.328888.xyz/2022/05/28/tW6aX.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="日用命令"/></a><div class="content"><a class="title" href="/2022/05/28/%E6%97%A5%E7%94%A8%E5%91%BD%E4%BB%A4/" title="日用命令">日用命令</a><time datetime="2022-05-28T08:08:14.000Z" title="发表于 2022-05-28 16:08:14">2022-05-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/28/%E6%95%B0%E5%AD%97%E8%97%8F%E5%93%81%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0(%E4%B8%80)/" title="数字藏品管理平台（一）"><img src="https://s3.bmp.ovh/imgs/2022/05/28/e7f58c6b9798fa35.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数字藏品管理平台（一）"/></a><div class="content"><a class="title" href="/2022/05/28/%E6%95%B0%E5%AD%97%E8%97%8F%E5%93%81%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0(%E4%B8%80)/" title="数字藏品管理平台（一）">数字藏品管理平台（一）</a><time datetime="2022-05-28T07:47:48.000Z" title="发表于 2022-05-28 15:47:48">2022-05-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/03/p1/" title="蓝桥-算法题-1"><img src="https://s3.bmp.ovh/imgs/2022/04/03/6fcde412af10a608.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="蓝桥-算法题-1"/></a><div class="content"><a class="title" href="/2022/04/03/p1/" title="蓝桥-算法题-1">蓝桥-算法题-1</a><time datetime="2022-04-03T15:38:24.000Z" title="发表于 2022-04-03 23:38:24">2022-04-03</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By SnoppDogg</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
