@@ -1,3 +1,4 @@
+http://example.com/2022/05/28/%E6%97%A5%E7%94%A8%E5%91%BD%E4%BB%A4/
 http://example.com/2022/05/28/%E6%95%B0%E5%AD%97%E8%97%8F%E5%93%81%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0(%E4%B8%80)/
 http://example.com/2022/04/03/p1/
 http://example.com/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/
@@ -5,3 +6,4 @@ http://example.com/2022/03/28/hello-world/
 http://example.com/
 http://example.com/tags/Fabric/
 http://example.com/tags/algorithm/
+http://example.com/tags/shell/
