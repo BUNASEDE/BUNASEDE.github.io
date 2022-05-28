@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-04-03T16:16:26.192Z</updated>
+  <updated>2022-05-28T07:54:19.528Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>数字藏品管理平台（一）</title>
+    <link href="http://example.com/2022/05/28/%E6%95%B0%E5%AD%97%E8%97%8F%E5%93%81%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0(%E4%B8%80)/"/>
+    <id>http://example.com/2022/05/28/%E6%95%B0%E5%AD%97%E8%97%8F%E5%93%81%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0(%E4%B8%80)/</id>
+    <published>2022-05-28T07:47:48.000Z</published>
+    <updated>2022-05-28T07:54:19.528Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="数字藏品管理平台"><a href="#数字藏品管理平台" class="headerlink" title="数字藏品管理平台"></a>数字藏品管理平台</h1><h2 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h2><ol><li>数字藏品管理平台，是指使用区块链技术，对特定的作品、艺术品生成唯一数字凭证，制作成区块链数字藏品，用以数字化发行、收藏和使用。简单说，就是每份数字藏品都拥有唯一的“身份证”，利用分布式的储存技术，可以给客户提供很多新的创意价值。且数字藏品都具有独有性、稀缺性。因此，数字藏品也可以说是一种有收藏价值的虚拟产品。</li><li>该平台数字藏品跟国外的nft数字藏品不同，该平台数字藏品主要用于收藏和自我观赏为主，通过区块链技术有效解决艺术品数字形态的唯一性、真实性和永久性，实现了确权与溯源的能力，在增强了艺术品的流动性的同时且无法被复制和随意纂改。</li></ol><h2 id="项目背景"><a href="#项目背景" class="headerlink" title="项目背景"></a>项目背景</h2><p>藏品在平台的确权问题 ：</p><ol><li>现实中的藏品在是唯⼀的，只是⼀件件物体，确权较为繁琐，⽆法满⾜数量较多，传播较快的 需求，对应到数字藏品，将数字作品上链，利⽤区块链的透明账本和不可篡改的特征，及其可 溯源等，⽣成数字作品的“身份证”，其版权将会得到在链上得到承认，解决确权问题，实现数 字作品和作者之间的唯⼀确定关系，减少确权维权成本。 </li><li>功能：平台在区块链共识机制下，单个节点⽆法对信息作出修改。要实现修改必须动⽤系统内 ⾄少51%的算⼒，篡改成本过⾼，可⾏性极低，由此可充分保障链上数字内容的不可篡改性。 同时借助区块链技术对数字作品进⾏确权时，可以减少传统作品版权申请、注册和登记的周期 与成本，可以为数字作品的创作者提供充分的便利性和创造更⾼的满意度。 </li><li>展望：平台可以为数字作品的保护提供链上的存证，但可能⽆法保证该⽤户上链的作品是否为 符合著作权法的合法原创作品，也⽆法识别原创作者的身份，⽆法辨别侵权与否，⾃⼰暂时的 想法是对上链的作品进⾏数字图像特征的提取，将作品和该作品特征都上链，将数字作品与原 创作者进⾏唯⼀绑定，相当于实现异于区块链本身对该作品⽣成的哈希值以外的作品版权确 认，确定链上的作品本质与作者映射的关系</li></ol><h2 id="项目实现"><a href="#项目实现" class="headerlink" title="项目实现"></a>项目实现</h2><ol><li><p>目前构想的三层架构：</p><ol><li>区块链网络：使用hyperledge-fabric搭建，在目前fabric支持的数据库中，采用<strong>CouchDB</strong>用来存放块数据</li><li>缓存层：Redis，可以将常用的平台数据存储到Redis，加快部分数据的查询速度</li><li>业务层逻辑层Dapp：使用Java开发，前后端技术采用springboot，vue，在Java项目代码中通过FabricSDK与搭建的Fabric网络进行交互（触发合约）。</li></ol></li><li><p>区块链网络搭建：</p><ol><li>基于阿里云服务器：Linux Ubuntu（10.04）搭建fabric网络，部署节点</li><li>fabric智能合约的开发采用go，并运行在容器当中</li></ol></li><li><p>区块链基础框架：fabric1.4.0</p></li></ol><h2 id="项目运行"><a href="#项目运行" class="headerlink" title="项目运行"></a>项目运行</h2><ol><li>在服务器上准备基础环境：包括fabric网络的搭建，单机部署运行；redis坏境搭建</li><li>Dapp开发环境：IDEA、XShell 、Xftp、jdk1.8 、go1.12（后续项目实现可能有变动）</li><li>运行启动：null</li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;数字藏品管理平台&quot;&gt;&lt;a href=&quot;#数字藏品管理平台&quot; class=&quot;headerlink&quot; title=&quot;数字藏品管理平台&quot;&gt;&lt;/a&gt;数字藏品管理平台&lt;/h1&gt;&lt;h2 id=&quot;项目介绍&quot;&gt;&lt;a href=&quot;#项目介绍&quot; class=&quot;headerlink&quot; </summary>
+      
+    
+    
+    
+    
+    <category term="Fabric" scheme="http://example.com/tags/Fabric/"/>
+    
+  </entry>
   
   <entry>
     <title>蓝桥-算法题-1</title>
