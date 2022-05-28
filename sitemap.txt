@@ -6,7 +6,6 @@ http://example.com/2022/05/28/fabric%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/
 http://example.com/2022/05/28/%E6%97%A5%E7%94%A8%E5%91%BD%E4%BB%A4/
 http://example.com/2022/05/28/%E6%95%B0%E5%AD%97%E8%97%8F%E5%93%81%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0(%E4%B8%80)/
 http://example.com/2022/04/03/p1/
-http://example.com/2022/03/28/hello-world/
 http://example.com/
 http://example.com/tags/Fabric/
 http://example.com/tags/algorithm/
