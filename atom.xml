@@ -160,6 +160,32 @@
   </entry>
   
   <entry>
+    <title>copilot协议</title>
+    <link href="http://example.com/2022/03/28/copilot%E5%8D%8F%E8%AE%AE/"/>
+    <id>http://example.com/2022/03/28/copilot%E5%8D%8F%E8%AE%AE/</id>
+    <published>2022-03-28T10:45:17.000Z</published>
+    <updated>2022-05-28T12:50:28.989Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="paper概述"><a href="#paper概述" class="headerlink" title="paper概述"></a>paper概述</h2><p>​        理解了这个slowdown- tolerance 在这个协议中RSM里面的执行逻辑，这是我的理解：在这个共识协议中将其一个leader替换为两个pilot和copilot，执行类似于paxos的选举机制选出两个new pilot来保证RSM的效率较快，client会同时发commands给这两个pilot，有一些在log entries里面的相互依赖和规则支持他们线性执行，如果一个pilot等待太长时间就会由另外一个copilot去fast takeover，当一个pilot挂掉以后，也会执行类似于paxos的选举去选举new pilot去代替挂掉的那个pilot，这样在存在slow的replicas时，会有一定的slowdown tolerance去保证其相比于Multi-Paxos、EPaxos等有一定效率上的提升。</p><h2 id="slowdown"><a href="#slowdown" class="headerlink" title="slowdown"></a>slowdown</h2><p>​    <strong>copilot慢速容忍协议</strong>，首先对slowdown 进行明确的定义。要定义一个节点的处理速度。一个节点从收到一条消息开始，到其处理这条消息完毕，将回复送出为止，这段时间的长短就是一个节点的处理速度。这段时间不包含消息在网络链路上的传输时间，仅包含消息在节点本机处理所需的时间。</p><p>​        假设一个节点处理一条消息的典型时间为 1ms，而设置超时阈值 <code>t</code> &#x3D; 10ms，那么如果该节点处理一条消息花费了大于等于 11ms，就说明该节点出现了 slowdown。出错（failed）的节点一定是 slowdown 的，但 slowdown 的节点不一定 failed——它只是响应速度变慢，而不是停止响应。</p><h2 id="为什么现有的共识协议无法容忍-slowdown"><a href="#为什么现有的共识协议无法容忍-slowdown" class="headerlink" title="为什么现有的共识协议无法容忍 slowdown"></a>为什么现有的共识协议无法容忍 slowdown</h2><p>​        一个分布式状态机系统在处理一条客户端指令时，如果在处理过程中的任意时间点，只有一条路径可走，那么该系统就存在“单点故障”的可能性——在这点处负责处理的节点发生 slowdown 会影响整个节点的处理速度。</p><h1 id="Copilot"><a href="#Copilot" class="headerlink" title="Copilot"></a>Copilot</h1><ol><li><p>Copilot还是一个类Paxos的一个分布式协议，其特点在于Copilot具有slowdown-tolerance的特性，其内部实现最终避免了高延迟。尽管存在一个慢速的副本，但仍然能够提供正常服务，实现具有slowdown-tolerance的RSM的第一步。</p></li><li><p>Copilot的提供slowdown-tolerance的必须能够提供的是client在四个阶段的慢速容忍，即如下四个阶段：</p><ol><li>Receive</li><li>Order：</li><li>Execute</li><li>Reply</li></ol><p>它使用了两个distinguished的replicas的来并行处理完成客户端的命令（pilot和copilot），Copilot被允许来   <em><strong>fast takeove</strong>r</em>  一个slow的pilot，Copilot 使用依赖关系组合日志     <em><strong>preAcceptDeps[] [][]    int32</strong></em>  ,   <em><strong>Instance.Deps[]</strong></em>     ,Copilot有两个phase，：</p><p>FastAccept:在该阶段如果多数的replicas同意pilot的排序，就提交到该fast阶段，pilot继续执行</p><p>Accept:若已经同意另一个pilot提出的不同顺序，pilot则会同意副本建议的依赖关系。（line:2908  <em><strong>handleTryPreAcceptReply</strong></em>()）</p></li><li><p>Copilot的两项优化：</p><ol><li>ping-pong batching：便于他们交替他们的建议，允许两个飞行员都致力于快速path</li><li>null dependency elimination：空依赖消除允许快速飞行员避免等待来自慢速飞行员的提交</li></ol><h2 id="Slowdown-Tolerance"><a href="#Slowdown-Tolerance" class="headerlink" title="Slowdown Tolerance"></a>Slowdown Tolerance</h2></li><li><p>采用viewchange来轮换leader，如何检测leader的减速，有两种机制即：</p><ul><li>根据过去throughput的峰值性能表现来逐渐增大leader的throughput的上下限：</li></ul><p><em><strong>clientol&#x2F;client.go processAndPrintThroughputs</strong></em>  ？</p><ul><li>每个peer之间不会超过heartbeat timeout,以确保领导者提出新批次的速度足够快</li></ul><p><em><strong>copilot.go  BeaconChan</strong></em></p><p>​    如果吞吐量低于下限或者超过了heartbeat timeout都会导致<em><strong>view change</strong></em>    来轮换副本中的leader ,</p></li><li><p><strong>Preparation for the beginning：</strong></p><img src="https://s2.loli.net/2022/05/28/osyfb1Bl89EQNu5.png" alt="image-20220315134306082" style="zoom: 80%;" /><p>在    <em><strong>ConnectToPeers()</strong></em>   中构建  PeerReaders   和   PeerWriters   时用了bufio，将要写入的数据存入缓冲区，然后一次性将数据写入文件。每次我们想读取文件内容时，会首先从缓冲区读取，提高了读取速度，也避免了频繁的 文件IO，</p><p><img src="https://s2.loli.net/2022/05/28/UrgxDXGWdsRLlQc.jpg" alt="bufio.Reader结构"></p></li></ol><p>Copilot 的 ordering 协议将command放入到  pilot log 和  copilot log 中，执行协议使用 Pilot 和 copilot 日志之间的最终依赖关系和一个优先级规则来构建单个组合日志，该优先级规则在 copilot 条目之前的一个循环中对 Pilot 条目进行排序。</p><ol><li><p>Copilot实现的Ordering协议完成的事：</p><ul><li>q日志条目的命令和 log entry 持久保存到副本stable storage</li><li>在多达 f 个副本（包括两个 Pilot）失败时可以恢复它们  <em><strong>instancesToRecover</strong></em></li></ul></li><li><p>client对两个pilot   都会发出commands</p></li><li><p>pilot  propose  command和 init dependency，在收到client发来的命令时，在<em><strong>r.handlePropose()</strong></em>     中pilot 将command放入到下一个可用的log  entry中</p><ul><li><img src="https://s2.loli.net/2022/05/28/7voqNZVm4iWEdrL.png"></li><li><img src="https://s2.loli.net/2022/05/28/eXLKDF4usPzvdRa.png" alt="image-20220316110800849" style="zoom: 33%;" />·                   兼容性检查</li></ul></li><li><p>一旦 entry 被committed 并且之前的所有排序过的entries都被执行 副本才会 execute a command</p><h1 id="slowdown机制"><a href="#slowdown机制" class="headerlink" title="slowdown机制"></a>slowdown机制</h1><p><img src="https://s2.loli.net/2022/05/28/pPObf6Fx21dg4jD.png" alt="viewchange (1)"></p></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;paper概述&quot;&gt;&lt;a href=&quot;#paper概述&quot; class=&quot;headerlink&quot; title=&quot;paper概述&quot;&gt;&lt;/a&gt;paper概述&lt;/h2&gt;&lt;p&gt;​        理解了这个slowdown- tolerance 在这个协议中RSM里面的执行逻辑</summary>
+      
+    
+    
+    
+    
+    <category term="分布式" scheme="http://example.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    <category term="一致性协议" scheme="http://example.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+    
+    <category term="论文笔记" scheme="http://example.com/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Ubuntu20.04安装部署Fabric v1.4.0 — 单机部署</title>
     <link href="http://example.com/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/"/>
     <id>http://example.com/2022/03/28/Ubuntu20.04%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2Fabric%20v1.4.0%20%E2%80%94%20%E5%8D%95%E6%9C%BA%E9%83%A8%E7%BD%B2/</id>
